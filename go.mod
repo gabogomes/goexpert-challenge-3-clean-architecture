@@ -1,6 +1,6 @@
-module github.com/devfullcycle/20-CleanArch
+module github.com/gabogomes/goexpert-challenge-3-clean-architecture
 
-go 1.19
+go 1.22.3
 
 require (
 	github.com/99designs/gqlgen v0.17.22

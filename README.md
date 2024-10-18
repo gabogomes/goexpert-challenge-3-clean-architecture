@@ -5,7 +5,7 @@ Now we should create the orders table in the database:
 ```bash
 docker compose exec -it mysql bash
 mysql -uroot -p orders
-CREATE TABLE orders (id varchar(255) NOT NULL, price float NOT NULL, tax float NOT NULL, final_price float NOT NULL, PRIMARY KEY (id))
+CREATE TABLE orders (id varchar(255) NOT NULL, price float NOT NULL, tax float NOT NULL, final_price float NOT NULL, PRIMARY KEY (id));
 ```
 
 Finally, start the application by going to `./cmd/ordersystem/` and using `go run main.go wire_gen.go`.
