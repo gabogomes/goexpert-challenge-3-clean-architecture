@@ -9,12 +9,14 @@ import (
 
 type OrderService struct {
 	pb.UnimplementedOrderServiceServer
-	CreateOrderUseCase usecase.CreateOrderUseCase
+	CreateOrderUseCase  usecase.CreateOrderUseCase
+	GetAllOrdersUseCase usecase.GetAllOrdersUseCase
 }
 
-func NewOrderService(createOrderUseCase usecase.CreateOrderUseCase) *OrderService {
+func NewOrderService(createOrderUseCase usecase.CreateOrderUseCase, getAllOrdersUseCase usecase.GetAllOrdersUseCase) *OrderService {
 	return &OrderService{
-		CreateOrderUseCase: createOrderUseCase,
+		CreateOrderUseCase:  createOrderUseCase,
+		GetAllOrdersUseCase: getAllOrdersUseCase,
 	}
 }
 
@@ -33,5 +35,27 @@ func (s *OrderService) CreateOrder(ctx context.Context, in *pb.CreateOrderReques
 		Price:      float32(output.Price),
 		Tax:        float32(output.Tax),
 		FinalPrice: float32(output.FinalPrice),
+	}, nil
+}
+
+func (s *OrderService) GetAllOrders(ctx context.Context, _ *pb.EmptyRequest) (*pb.GetAllOrdersResponse, error) {
+	orders, err := s.GetAllOrdersUseCase.Execute()
+	if err != nil {
+		return nil, err
+	}
+
+	var pbOrders []*pb.Order
+	for _, order := range orders {
+		pbOrder := &pb.Order{
+			Id:         order.ID,
+			Price:      float32(order.Price),
+			Tax:        float32(order.Tax),
+			FinalPrice: float32(order.FinalPrice),
+		}
+		pbOrders = append(pbOrders, pbOrder)
+	}
+
+	return &pb.GetAllOrdersResponse{
+		Orders: pbOrders,
 	}, nil
 }
