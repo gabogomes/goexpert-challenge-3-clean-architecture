@@ -1,3 +1,5 @@
+# Instructions
+
 To initiate the application, use `docker compose up -d`
 
 Now we should create the orders table in the database:
@@ -36,3 +38,11 @@ the figures below.
 
 Basically, we created a new queue and added a binding with `amq.direct`. Now, if you execute the GraphQL mutation again and check
 out the queue in the RabbitMQ management console, you will see one message in the queue, as it was expected.
+
+# Local Setup
+
+Run `docker compose up --build`. The ports for accessing the services are:
+
+- Web Server => Port 8000
+- GraphQL => Port 8080
+- gRPC => Port 50051
