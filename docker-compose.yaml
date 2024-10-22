@@ -8,7 +8,9 @@ services:
       MYSQL_PASSWORD: root
     ports:
       - 3306:3306
-    restart: "no"  # This prevents the container from restarting
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    restart: "no"
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -19,4 +21,19 @@ services:
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
-    restart: "no"  # This prevents the container from restarting
+    restart: "no"
+
+  ordersystem:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: ordersystem
+    depends_on:
+      - mysql
+      - rabbitmq
+    ports:
+      - "8080:8080"
+      - "8000:8000"
+      - "50051:50051"
+    command: /bin/sh -c "sleep 15 && /app/ordersystem"
+    restart: "no"
